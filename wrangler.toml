@@ -5,7 +5,7 @@ compatibility_date = "2026-07-21"
 pages_build_output_dir = ".output/public"
 
 [[d1_databases]]
-binding = "DATABASE"
+binding = "DB"
 database_name = "sazzle-db1"
 
 database_id = "ffa1ff73-d0be-4325-82d2-85cfb667d8f9"
