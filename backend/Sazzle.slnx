@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="Sazzle.Api/Sazzle.Api.csproj" />
+  <Project Path="Sazzle.Application/Sazzle.Application.csproj" />
+  <Project Path="Sazzle.Domain/Sazzle.Domain.csproj" />
+  <Project Path="Sazzle.Infrastructure/Sazzle.Infrastructure.csproj" />
+  <Project Path="Sazzle.Tests/Sazzle.Tests.csproj" />
+</Solution>

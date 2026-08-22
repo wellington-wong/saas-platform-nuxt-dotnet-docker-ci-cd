@@ -1,0 +1,6 @@
+@Sazzle.Api_HostAddress = http://localhost:5080
+
+GET {{Sazzle.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
