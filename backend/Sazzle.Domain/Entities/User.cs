@@ -10,9 +10,9 @@ public class User
     public bool EmailConfirmed { get; private set; }
     public DateTime CreatedAt { get; private set; }
 
-    private readonly List<OrganizationMember> _membership = new();
+    private readonly List<OrganizationMember> _memberships = new();
 
-    public IReadOnlyCollection<OrganizationMember> Memberships => _membership.AsReadOnly();
+    public IReadOnlyCollection<OrganizationMember> Memberships => _memberships.AsReadOnly();
     
     private User() {}
 

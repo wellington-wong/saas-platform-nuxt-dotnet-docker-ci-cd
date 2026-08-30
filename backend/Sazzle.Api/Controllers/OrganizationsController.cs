@@ -1,9 +1,13 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Sazzle.Application.Organizations;
+
 namespace Sazzle.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/orgs")]
+[Authorize]
 public class OrganizationsController : ControllerBase
 {
     private readonly OrganizationService _organizationService;
@@ -14,16 +18,17 @@ public class OrganizationsController : ControllerBase
 
     }
 
-    public record CreateOrganizationRequest(string Name, string Slug, Guid CreatorUserId);
+    public record CreateOrganizationRequest(string Name, string Slug);
 
     [HttpPost]
     public async Task<IActionResult> Create(CreateOrganizationRequest request)
     {
+        var userId = GetCurrentUserId();
         try
         {
 
             var organization = await _organizationService.CreateOrganizationAsync(
-                request.Name, request.Slug, request.CreatorUserId);
+                request.Name, request.Slug, userId);
 
             return Ok(new { organization.Id, organization.Name, organization.Slug });
         }
@@ -32,5 +37,27 @@ public class OrganizationsController : ControllerBase
             return BadRequest(new { error = ex.Message });
         }
 
+    }
+
+    private Guid GetCurrentUserId()
+    {
+
+        var sub = User.FindFirst(ClaimTypes.NameIdentifier)?.Value
+                  ?? User.FindFirst("sub")?.Value;
+
+        if (sub is null || !Guid.TryParse(sub, out var userId))
+            throw new UnauthorizedAccessException("Invalid or missing user identity in token.");
+
+        return userId;
+    }
+
+
+    [HttpGet("me")]
+    public async Task<IActionResult> GetMyOrganizations()
+    {
+        var userId = GetCurrentUserId();
+        var orgs = await _organizationService.GetMyOrganizationsAsync(userId);
+
+        return Ok(orgs.Select(o => new { o.Id, o.Name, o.Slug }));
     }
 }

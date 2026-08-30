@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Sazzle.Infrastructure.Persistence;
@@ -11,9 +12,11 @@ using Sazzle.Infrastructure.Persistence;
 namespace Sazzle.Infrastructure.Migrations
 {
     [DbContext(typeof(SazzleDbContext))]
-    partial class SazzleDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260828092243_AddInvitations")]
+    partial class AddInvitations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

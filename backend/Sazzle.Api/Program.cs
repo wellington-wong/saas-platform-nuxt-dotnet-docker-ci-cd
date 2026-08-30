@@ -8,6 +8,10 @@ using Sazzle.Application.Auth;
 using Sazzle.Infrastructure.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
+using Sazzle.Api.Authorization;
+using Sazzle.Application.Authorization;
+
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -45,9 +49,26 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
     };
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddScoped<IInvitationRepository, InvitationRepository>();
+builder.Services.AddScoped<InvitationService>();
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IAuthorizationHandler, PermissionAuthorizationHandler>();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("members:invite", policy =>
+        policy.Requirements.Add(new PermissionRequirement("members:invite")));
+    options.AddPolicy("members:remove", policy =>
+        policy.Requirements.Add(new PermissionRequirement("members:remove")));
+    options.AddPolicy("roles:manage", policy =>
+
+        policy.Requirements.Add(new PermissionRequirement("roles:manage")));
+    options.AddPolicy("billing:write", policy =>
+        policy.Requirements.Add(new PermissionRequirement("billing:write")));
+});
 var app = builder.Build();
 
+    
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SazzleDbContext>();

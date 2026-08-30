@@ -34,4 +34,7 @@ public class OrganizationService
 
         return organization;
     }
+
+	public async Task<List <Organization>> GetMyOrganizationsAsync(Guid userid) =>
+		await _organizations.GetByUserIdAsync(userid);
 }

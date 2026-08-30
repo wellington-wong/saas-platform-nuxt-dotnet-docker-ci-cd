@@ -16,10 +16,17 @@ public class SazzleDbContext : DbContext
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<Permission> Permissions => Set<Permission>();
 
+    public DbSet<Invitation> Invitations => Set<Invitation>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(SazzleDbContext).Assembly);
-        base.OnModelCreating(modelBuilder);
+
+		modelBuilder.Entity<Organization>().UsePropertyAccessMode(PropertyAccessMode.Field);
+		modelBuilder.Entity<Team>().UsePropertyAccessMode(PropertyAccessMode.Field);
+		modelBuilder.Entity<User>().UsePropertyAccessMode(PropertyAccessMode.Field);
+		modelBuilder.Entity<Role>().UsePropertyAccessMode(PropertyAccessMode.Field);     
+		base.OnModelCreating(modelBuilder);
     }
 
 }
