@@ -65,6 +65,8 @@ builder.Services.AddAuthorization(options =>
         policy.Requirements.Add(new PermissionRequirement("roles:manage")));
     options.AddPolicy("billing:write", policy =>
         policy.Requirements.Add(new PermissionRequirement("billing:write")));
+    options.AddPolicy("members:view", policy =>
+        policy.Requirements.Add(new PermissionRequirement("members:view")));
 });
 var app = builder.Build();
 

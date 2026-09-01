@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Sazzle.Application.Common.Interfaces;
 using Sazzle.Domain.Entities;
 using Sazzle.Infrastructure.Persistence;
+using Sazzle.Application.Organizations;
 
 namespace Sazzle.Infrastructure.Repositories;
 
@@ -42,5 +43,29 @@ public class OrganizationRepository : IOrganizationRepository
 			.AnyAsync(p => p.Key == permissionKey);
 
 
+	
+	}
+
+	public async Task<List<OrganizationMemberDetails>> GetMembersAsync(Guid organizationId)
+	{
+		return await _context.OrganizationMembers
+			.Where(m => m.OrganizationId == organizationId)
+			.Join(_context.Users, m => m.UserId, u => u.Id, (m, u) => new {m, u})
+			.Join(_context.Roles, mu => mu.m.RoleId, r => r.Id, (mu, r) => new OrganizationMemberDetails(mu.u.Id, mu.u.Email, mu.u.FullName, r.Name, mu.m.JoinedAt))
+
+			.ToListAsync();
+	}
+
+	public async Task<bool> RemoveMemberAsync(Guid organizationId, Guid userId)
+	{
+		var member = await _context.OrganizationMembers
+			.FirstOrDefaultAsync(m => m.OrganizationId == organizationId && m.UserId == userId);
+
+		if (member is null) return false;
+
+		_context.OrganizationMembers.Remove(member);
+		await _context.SaveChangesAsync();
+		
+		return true;
 	}
 }

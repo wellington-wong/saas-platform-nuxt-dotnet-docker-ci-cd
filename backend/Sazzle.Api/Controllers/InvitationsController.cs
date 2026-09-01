@@ -23,6 +23,13 @@ public class InvitationsController : ControllerBase
     public async Task<IActionResult> Invite(Guid orgId, InviteRequest request)
 
     {
+
+		if (request.RoleId == Guid.Empty)
+			return BatRequest(new { error = "roleId is required." });
+
+		if (string.IsNullOrWhiteSpace(request.Email)
+			return BadRequest(new { error = "email is required." });
+	
         var userId = GetCurrentUserId();
         var invitation = await _invitationService.InviteAsync(orgId, request.Email, request.RoleId, userId);
         return Ok(new { invitation.Id, invitation.Email, invitation.Token, invitation.ExpiresAt });

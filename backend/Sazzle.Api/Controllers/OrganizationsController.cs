@@ -60,4 +60,30 @@ public class OrganizationsController : ControllerBase
 
         return Ok(orgs.Select(o => new { o.Id, o.Name, o.Slug }));
     }
+
+
+
+	[HttpGet("{orgId}/members")]
+	[Authorize(Policy = "members:view")]
+	public async Task<IActionResult> GetMembers(Guid orgId)
+	{
+		var members = await _organizationService.GetMembersAsync(orgId);
+		return Ok(members);
+	}
+
+
+
+	[HttpDelete("{orgId}/members/{userId}")]
+	[Authorize(Policy = "members:remove")]
+	public async Task<IActionResult> RemoveMember(Guid orgId, Guid userId)
+	{
+		if (userId == GetCurrentUserId())
+			return BadRequest(new { error = "You cannot remove yourself from the organization." });
+
+		var removed = await _organizationService.RemoveMemberAsync(orgId, userId);
+		if (!removed) return NotFound();
+
+		return NoContent();
+
+	}
 }

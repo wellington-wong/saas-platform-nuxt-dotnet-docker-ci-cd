@@ -15,19 +15,25 @@ public static class DbSeeder
         var manageRoles = new Permission("roles:manage", "Create and assign custom roles");
         var billing = new Permission("billing:write", "Manage billing and subscription");
 
+        var view = new Permission("members:view", "View organization members");
+        context.Permissions.Add(view);
+        
         var owner = new Role("Owner");
         owner.GrantPermission(invite);
         owner.GrantPermission(remove);
+        
         owner.GrantPermission(manageRoles);
         owner.GrantPermission(billing);
 
+        owner.GrantPermission(view);
         
         var admin = new Role("Admin");
         admin.GrantPermission(invite);
         admin.GrantPermission(remove);
+        admin.GrantPermission(view);
         
         var member = new Role("Member");
-        // no elevate permissions
+        member.GrantPermission(view);
         
         context.Roles.AddRange(owner, admin, member);
         await context.SaveChangesAsync();
