@@ -68,8 +68,21 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("members:view", policy =>
         policy.Requirements.Add(new PermissionRequirement("members:view")));
 });
-var app = builder.Build();
 
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
+
+
+
+var app = builder.Build();
     
 using (var scope = app.Services.CreateScope())
 {
@@ -84,7 +97,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("AllowFrontend");
+    
 app.UseAuthentication();
 
 app.UseAuthorization();

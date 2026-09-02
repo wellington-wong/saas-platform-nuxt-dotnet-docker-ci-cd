@@ -25,9 +25,9 @@ public class InvitationsController : ControllerBase
     {
 
 		if (request.RoleId == Guid.Empty)
-			return BatRequest(new { error = "roleId is required." });
+			return BadRequest(new { error = "roleId is required." });
 
-		if (string.IsNullOrWhiteSpace(request.Email)
+		if (string.IsNullOrWhiteSpace(request.Email))
 			return BadRequest(new { error = "email is required." });
 	
         var userId = GetCurrentUserId();
