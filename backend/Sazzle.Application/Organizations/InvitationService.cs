@@ -43,6 +43,10 @@ public class InvitationService
 
 
 
+        var alreadyMember = organization.Members.Any(m => m.UserId == acceptingUserId);
+        if (alreadyMember)
+            throw new InvalidOperationException("You are already a member of this organization.");
+        
         invitation.Accept();
         var member = organization.AddMember(acceptingUserId, invitation.RoleId);
 
