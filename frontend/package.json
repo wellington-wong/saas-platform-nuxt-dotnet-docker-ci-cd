@@ -15,7 +15,7 @@
     "@pinia/nuxt": "1.0.2",
     "@vueuse/nuxt": "^14.3.0",
     "drizzle-orm": "^0.45.2",
-    "nuxt": "^3.21.11",
+    "nuxt": "npm:nuxt-nightly@5x",
     "pinia": "^4.0.3",
     "vue": "^3.5.40",
     "vue-router": "^5.2.0"
