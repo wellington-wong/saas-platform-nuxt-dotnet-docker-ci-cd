@@ -91,7 +91,7 @@ jobs:
           script: |
             set -e
 
-            cd /opt/sazzle
+            cd /apps/sazzle
 
 
             expot SAZZLE_IMAGE_TAG="${{ github.sha }}"
