@@ -13,6 +13,7 @@ using Sazzle.Api.Authorization;
 using Sazzle.Application.Authorization;
 
 using System.Text;
+using Microsoft.AspNetCore.HttpOverrides;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -82,11 +83,20 @@ builder.Services.AddCors(options =>
 
 
 
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders =
+        ForwardedHeaders.XForwardedFor |
+        ForwardedHeaders.XForwardedProto;
+}
+    
 var app = builder.Build();
     
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<SazzleDbContext>();
+
+    await db.Database.MigrateAsync();
     await DbSeeder.SeedSystemRolesAsync(db);
 }
 
@@ -96,6 +106,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.useForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
     

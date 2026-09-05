@@ -1,0 +1,108 @@
+name: Deployt Sazzle API
+
+on:
+
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+env:
+
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ghcr.io/${{ github.repository_owner }}/sazzle-api
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+
+        run: dotnet restore Sazzle.slnx
+
+      - name: Build
+        run: dotnet build Sazzle.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test Sazzle.slnx --configuration Release --no-build
+
+
+
+
+  docker:
+    name: Build and Push Docker Image
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build image
+        run: |
+
+          docker build \
+            -t $IMAGE_NAME:${{ github.sha }} \
+            -t $IMAGE_NAME:latest \
+            .
+
+      - name: Push image
+        run: |
+          docker push $IMAGE_NAME:${{ github.sha }}
+          docker push $IMAGE_NAME:latest
+
+
+  deploy:
+    name: Deploy to VPS
+    needs: docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.2.2
+
+
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          script: |
+            set -e
+
+            cd /opt/sazzle
+
+
+            expot SAZZLE_IMAGE_TAG="${{ github.sha }}"
+
+            echo "${{ secrets.GHCR_TOKEN }}" | \
+              docker login ghcr.io \
+              --username "${{ secrets.GHCR_USERNAME }}" \
+              --password-stdin
+
+
+
+
+            docker compose pull api
+            docker compose up -d api
+            docker image prune -f
