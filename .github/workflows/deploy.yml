@@ -94,7 +94,7 @@ jobs:
             cd apps/sazzle
 
 
-            expot SAZZLE_IMAGE_TAG="${{ github.sha }}"
+            export SAZZLE_IMAGE_TAG="${{ github.sha }}"
 
             echo "${{ secrets.GHCR_TOKEN }}" | \
               docker login ghcr.io \
