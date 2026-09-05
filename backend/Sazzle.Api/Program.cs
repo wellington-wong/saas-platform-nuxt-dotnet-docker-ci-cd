@@ -106,7 +106,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.useForwardedHeaders();
+app.UseForwardedHeaders();
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
     
