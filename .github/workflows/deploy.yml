@@ -32,13 +32,13 @@ jobs:
 
       - name: Restore
 
-        run: dotnet restore Sazzle.slnx
+        run: dotnet restore backend/Sazzle.slnx
 
       - name: Build
-        run: dotnet build Sazzle.slnx --configuration Release --no-restore
+        run: dotnet build backend/Sazzle.slnx --configuration Release --no-restore
 
       - name: Test
-        run: dotnet test Sazzle.slnx --configuration Release --no-build
+        run: dotnet test backend/Sazzle.slnx --configuration Release --no-build
 
 
 
@@ -65,12 +65,13 @@ jobs:
           docker build \
             -t $IMAGE_NAME:${{ github.sha }} \
             -t $IMAGE_NAME:latest \
-            .
+            ./backend
 
       - name: Push image
         run: |
           docker push $IMAGE_NAME:${{ github.sha }}
           docker push $IMAGE_NAME:latest
+
 
 
   deploy:
