@@ -83,7 +83,7 @@ onMounted(fetchOrgs)
         <button type="submit" :disabled="creating"
 
                 class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50">
-          {{ creating ? 'Creating...' : 'Creating Organization' }}
+          {{ creating ? 'Creating...' : 'Create Organization' }}
         </button>
       </form>
     </div>
