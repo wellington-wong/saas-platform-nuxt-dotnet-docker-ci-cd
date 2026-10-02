@@ -2,7 +2,7 @@ export const useApi = () => {
     const config = useRuntimeConfig()
     const authStore = useAuthStore()
 
-    console.log(config.public.apiBase)
+
     const apiFetch = $fetch.create({
         baseURL: config.public.apiBase,
         onRequest({options}) {
