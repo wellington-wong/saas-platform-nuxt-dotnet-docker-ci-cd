@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-register',
@@ -88,7 +89,7 @@ export class Register {
   register(fullName: string, email: string, password: string): void {
     this.loading.set(true);
     this.error.set('');
-    this.http.post('http://localhost:5080/api/auth/register', { email, password, fullName }).subscribe({
+    this.http.post(`${environment.apiBaseUrl}/api/auth/register`, { email, password, fullName }).subscribe({
       next: () => {
         this.loading.set(false);
         void this.router.navigateByUrl('/login');

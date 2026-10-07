@@ -2,6 +2,7 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -81,7 +82,7 @@ export class Login {
   signIn(email: string, password: string): void {
     this.loading.set(true);
     this.error.set('');
-    this.http.post('http://localhost:5080/api/auth/login', { email, password }).subscribe({
+    this.http.post(`${environment.apiBaseUrl}/api/auth/login`, { email, password }).subscribe({
       next: () => {
         this.loading.set(false);
         void this.router.navigateByUrl('/');
