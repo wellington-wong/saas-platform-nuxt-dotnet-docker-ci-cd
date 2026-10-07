@@ -1,0 +1,99 @@
+import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+
+@Component({
+  selector: 'app-layout',
+  standalone: true,
+  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  template: `
+    <div class="flex h-screen bg-slate-50 text-slate-900 font-sans">
+      <!-- Sidebar Navigation -->
+      <aside class="w-64 border-r border-slate-200 bg-white hidden md:flex flex-col">
+        <div class="p-6 border-b border-slate-100 flex items-center space-x-2">
+          <div
+            class="h-6 w-6 rounded bg-indigo-600 flex items-center justify-center text-white font-bold text-xs"
+          >
+            R
+          </div>
+          <span class="font-bold tracking-tight text-slate-900">Requestop</span>
+        </div>
+
+        <nav class="flex-1 p-4 space-y-1 text-sm font-medium">
+          <a
+            routerLink="/"
+            routerLinkActive="bg-slate-100 text-slate-900 font-semibold"
+            [routerLinkActiveOptions]="{ exact: true }"
+            class="flex items-center px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            Dashboard
+          </a>
+          <a
+            routerLink="/analytics"
+            routerLinkActive="bg-slate-100 text-slate-900 font-semibold"
+            class="flex items-center px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            Analytics
+          </a>
+          <a
+            routerLink="/customers"
+            routerLinkActive="bg-slate-100 text-slate-900 font-semibold"
+            class="flex items-center px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            Customers
+          </a>
+          <a
+            routerLink="/team"
+            routerLinkActive="bg-slate-100 text-slate-900 font-semibold"
+            class="flex items-center px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            Team
+          </a>
+          <a
+            routerLink="/billing"
+            routerLinkActive="bg-slate-100 text-slate-900 font-semibold"
+            class="flex items-center px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            Billing
+          </a>
+          <a
+            routerLink="/settings"
+            routerLinkActive="bg-slate-100 text-slate-900 font-semibold"
+            class="flex items-center px-3 py-2 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors"
+          >
+            Settings
+          </a>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="p-4 border-t border-slate-100">
+          <a
+            routerLink="/login"
+            class="flex items-center px-3 py-2 rounded-lg text-sm font-medium text-rose-600 hover:bg-rose-50 transition-colors"
+          >
+            Sign Out
+          </a>
+        </div>
+      </aside>
+
+      <!-- Main Content Area -->
+      <main class="flex-1 flex flex-col overflow-y-auto">
+        <header
+          class="h-16 border-b border-slate-200 bg-white px-8 flex items-center justify-between shadow-xs"
+        >
+          <h1 class="text-sm font-semibold text-slate-800">Workspace Management</h1>
+          <div class="flex items-center space-x-3">
+            <span class="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
+            <span class="text-xs font-medium text-slate-600">Edge SSR (Workers)</span>
+          </div>
+        </header>
+
+        <!-- Nested Workspace Child Routes render here -->
+        <div class="flex-1">
+          <router-outlet></router-outlet>
+        </div>
+      </main>
+    </div>
+  `,
+})
+export class Layout {}
