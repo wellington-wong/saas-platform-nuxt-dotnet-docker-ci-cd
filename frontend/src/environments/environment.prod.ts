@@ -1,3 +1,3 @@
 export const environment = {
-  apiBaseUrl: 'http://localhost:5080',
+  apiBaseUrl: 'https://dotnet-api.wellington.codes',
 };
