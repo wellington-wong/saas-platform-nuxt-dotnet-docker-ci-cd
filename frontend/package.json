@@ -10,7 +10,7 @@
     "serve:ssr:requestank": "node dist/requestank/server/server.mjs",
     "process": "node ./tools/copy-files.mjs",
     "deploy": "npm run build && wrangler pages deploy",
-    "devnet": "concurrently \"ng serve\" \"dotnet run --project ../backend/Sazzle.Api\"",
+    "devnet": "concurrently \"ng serve\" \"npx wrangler pages dev\" \"dotnet run --project ../backend/Sazzle.Api\"",
     "cf-typegen": "wrangler types"
   },
   "private": true,
