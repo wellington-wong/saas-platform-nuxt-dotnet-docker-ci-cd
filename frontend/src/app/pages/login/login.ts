@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
@@ -82,10 +83,10 @@ export class Login {
   signIn(email: string, password: string): void {
     this.loading.set(true);
     this.error.set('');
-    this.http.post(`${environment.apiBaseUrl}/api/auth/login`, { email, password }).subscribe({
-      next: () => {
+    this.http.post(`${environment.apiEdgeUrl}/api/auth/login`, { email, password }).subscribe({
+      next: (res) => {console.log(res)
         this.loading.set(false);
-        void this.router.navigateByUrl('/');
+        //void this.router.navigateByUrl('/');
       },
       error: (err: { error?: { message?: string }; message?: string }) => {
         this.loading.set(false);
