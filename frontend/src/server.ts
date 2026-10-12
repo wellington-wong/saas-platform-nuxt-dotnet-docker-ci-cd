@@ -12,7 +12,21 @@ const angularApp = new AngularAppEngine({
 export const reqHandler = createRequestHandler(async (req) => {
 	const res = await angularApp.handle(req);
 
-	return res ?? new Response('Page not found.', { status: 404 });
+  const url = new URL(req.url)
+  if (url.pathname === '/api/test') {
+    try {
+      const apiRes = await fetch('https://api.chucknorris.io/jokes/random');
+      const data = await apiRes.json();
+
+      return new Response(JSON.stringify({ success: true, joke: data.value }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    } catch (err: any) {
+      return res;
+    }
+  }
+  return res ?? new Response('Page not found.', { status: 404 });
 });
 
 
