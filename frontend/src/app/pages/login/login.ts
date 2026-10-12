@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 
 import { Router, RouterLink } from '@angular/router';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -83,10 +82,10 @@ export class Login {
   signIn(email: string, password: string): void {
     this.loading.set(true);
     this.error.set('');
-    this.http.post(`${environment.apiEdgeUrl}/api/auth/login`, { email, password }).subscribe({
-      next: (res) => {console.log(res)
+    this.http.post(`/api/auth/login`, { email, password }).subscribe({
+      next: (res) => {
         this.loading.set(false);
-        //void this.router.navigateByUrl('/');
+        void this.router.navigateByUrl('/');
       },
       error: (err: { error?: { message?: string }; message?: string }) => {
         this.loading.set(false);
