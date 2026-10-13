@@ -1,4 +1,4 @@
-# SaaS Platform
+# SaaS Platform 
 
 A modern, production-ready **SaaS starter platform** built with **Nuxt, .NET, and PostgreSQL**, with Docker-based deployment and automated CI/CD.
 
