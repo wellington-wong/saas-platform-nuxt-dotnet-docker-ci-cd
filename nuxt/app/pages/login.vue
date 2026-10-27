@@ -46,13 +46,13 @@ const handleLogin = async () => {
       <h1 class="text-2xl font-semibold mb-6">Log in to Sazzle</h1>
       <div class="mb-4">
         <label class="block text-sm font-medium mb-1">Email</label>
-        <input v-model="email" type="email" required class="w-full border rounded px-3 py-2" />
+        <input v-model="email" type="email" required class="w-full border rounded px-3 py-2" value="test@wellington.codes" />
       </div>
 
       <div class="mb-4">
         <label class="block text-sm font-medium mb-1">Password</label>
 
-        <input v-model="password" type="password" required class="w-full border rounded px-3 py-2" />
+        <input v-model="password" type="password" required class="w-full border rounded px-3 py-2" value="tester" />
       </div>
 
       <p v-if="error" class="text-red-600 text-sm mb-4">{{ error }}</p>

@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+
 using Sazzle.Application.Authorization;
 using Sazzle.Application.Common.Interfaces;
 
