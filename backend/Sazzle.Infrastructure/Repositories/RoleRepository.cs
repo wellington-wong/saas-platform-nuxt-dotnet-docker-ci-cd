@@ -14,6 +14,13 @@ public class RoleRepository : IRoleRepository
 
     public Task<Role?> GetSystemRoleByNameAsync(string name) =>
         _context.Roles.FirstOrDefaultAsync(r => r.OrganizationId == null && r.Name == name);
+
+    public async Task<IReadOnlyList<Role>> GetSystemRolesAsync() =>
+        await _context.Roles
+            .AsNoTracking()
+            .Where(r => r.OrganizationId == null)
+            .OrderBy(r => r.Name)
+            .ToListAsync();
     
     public async Task AddAsync(Role role) =>
         await _context.Roles.AddAsync(role);
