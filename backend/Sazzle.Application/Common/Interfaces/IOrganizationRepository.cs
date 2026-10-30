@@ -10,6 +10,7 @@ public interface IOrganizationRepository
     Task<Organization?> GetBySlugAsync(string slug);
     Task AddAsync(Organization organization);
 	Task AddMemberAsync(OrganizationMember member);
+	Task AddTeamAsync(Team team);
 	Task<bool> UserHasPermissionAsync(Guid userId, Guid organizationId, string permissionKey);
 	
 

@@ -86,4 +86,20 @@ public class OrganizationsController : ControllerBase
 		return NoContent();
 
 	}
+
+	public record CreateTeamRequest(string Name);
+
+	[HttpPost("{orgId}/teams")]
+	[Authorize(Policy = "teams:manage")]
+	public async Task<IActionResult> CreateTeam(Guid orgId, CreateTeamRequest request)
+	{
+		if (string.IsNullOrWhiteSpace(request.Name))
+			return BadRequest(new { error = "name is required." });
+
+		var team = await _organizationService.CreateTeamAsync(orgId, request.Name.Trim());
+		if (team is null)
+			return NotFound();
+
+		return Created($"api/orgs/{orgId}/teams/{team.Id}", new { team.Id, team.OrganizationId, team.Name });
+	}
 }

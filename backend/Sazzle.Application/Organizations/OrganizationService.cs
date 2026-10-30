@@ -46,4 +46,16 @@ public class OrganizationService
 	public async Task<bool> RemoveMemberAsync(Guid organizationId, Guid userId) =>
 		await _organizations.RemoveMemberAsync(organizationId, userId);
 
+	public async Task<Team?> CreateTeamAsync(Guid organizationId, string name)
+	{
+		var organization = await _organizations.GetByIdAsync(organizationId);
+		if (organization is null)
+			return null;
+
+		var team = organization.AddTeam(name);
+		await _organizations.AddTeamAsync(team);
+		await _organizations.SaveChangesAsync();
+		return team;
+	}
+
 }

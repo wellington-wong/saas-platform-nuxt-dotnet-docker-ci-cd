@@ -6,36 +6,52 @@ public static class DbSeeder
 {
     public static async Task SeedSystemRolesAsync(SazzleDbContext context)
     {
-        if (await context.Roles.AnyAsync(r => r.OrganizationId == null))
-            return;
+        var roles = await context.Roles
+            .Include(role => role.Permissions)
+            .Where(role => role.OrganizationId == null)
+            .ToListAsync();
 
-        var invite = new Permission("members:invite", "Invite new members to the organization");
-        var remove = new Permission("members:remove", "Remove members from the organization");
+        var owner = roles.FirstOrDefault(role => role.Name == "Owner");
+        var admin = roles.FirstOrDefault(role => role.Name == "Admin");
+        var member = roles.FirstOrDefault(role => role.Name == "Member");
 
-        var manageRoles = new Permission("roles:manage", "Create and assign custom roles");
-        var billing = new Permission("billing:write", "Manage billing and subscription");
+        var invite = await GetOrAddPermissionAsync(context, "members:invite", "Invite new members to the organization");
+        var remove = await GetOrAddPermissionAsync(context, "members:remove", "Remove members from the organization");
+        var manageRoles = await GetOrAddPermissionAsync(context, "roles:manage", "Create and assign custom roles");
+        var manageTeams = await GetOrAddPermissionAsync(context, "teams:manage", "Create and manage organization teams");
+        var billing = await GetOrAddPermissionAsync(context, "billing:write", "Manage billing and subscription");
+        var view = await GetOrAddPermissionAsync(context, "members:view", "View organization members");
 
-        var view = new Permission("members:view", "View organization members");
-        context.Permissions.Add(view);
-        
-        var owner = new Role("Owner");
+        owner ??= new Role("Owner");
+        admin ??= new Role("Admin");
+        member ??= new Role("Member");
+
         owner.GrantPermission(invite);
         owner.GrantPermission(remove);
-        
         owner.GrantPermission(manageRoles);
+        owner.GrantPermission(manageTeams);
         owner.GrantPermission(billing);
-
         owner.GrantPermission(view);
-        
-        var admin = new Role("Admin");
+
         admin.GrantPermission(invite);
         admin.GrantPermission(remove);
         admin.GrantPermission(view);
-        
-        var member = new Role("Member");
+
         member.GrantPermission(view);
-        
-        context.Roles.AddRange(owner, admin, member);
+
+        context.Roles.AddRange(new[] { owner, admin, member }.Where(role => !roles.Contains(role)));
         await context.SaveChangesAsync();
+    }
+
+    private static async Task<Permission> GetOrAddPermissionAsync(
+        SazzleDbContext context, string key, string description)
+    {
+        var permission = await context.Permissions.FirstOrDefaultAsync(item => item.Key == key);
+        if (permission is not null)
+            return permission;
+
+        permission = new Permission(key, description);
+        context.Permissions.Add(permission);
+        return permission;
     }
 }

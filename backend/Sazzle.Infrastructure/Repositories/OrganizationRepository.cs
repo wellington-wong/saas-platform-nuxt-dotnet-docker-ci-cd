@@ -33,6 +33,8 @@ public class OrganizationRepository : IOrganizationRepository
 
 	public async Task AddMemberAsync(OrganizationMember member) => await _context.OrganizationMembers.AddAsync(member);
 
+	public async Task AddTeamAsync(Team team) => await _context.Teams.AddAsync(team);
+
 
 	public async Task<bool> UserHasPermissionAsync(Guid userId, Guid organizationId, string permissionKey)
 	{

@@ -14,6 +14,7 @@ using Sazzle.Application.Authorization;
 
 using System.Text;
 using Microsoft.AspNetCore.HttpOverrides;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,6 +69,8 @@ builder.Services.AddAuthorization(options =>
         policy.Requirements.Add(new PermissionRequirement("billing:write")));
     options.AddPolicy("members:view", policy =>
         policy.Requirements.Add(new PermissionRequirement("members:view")));
+    options.AddPolicy("teams:manage", policy =>
+        policy.Requirements.Add(new PermissionRequirement("teams:manage")));
 });
 
 var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? [];
@@ -88,8 +91,9 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.ForwardedHeaders =
         ForwardedHeaders.XForwardedFor |
         ForwardedHeaders.XForwardedProto;
+
 });
-    
+builder.Services.AddOpenApi();     
 var app = builder.Build();
     
 using (var scope = app.Services.CreateScope())
@@ -101,12 +105,15 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (!app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
+
 app.UseForwardedHeaders();
+
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
     
