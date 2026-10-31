@@ -1,0 +1,7 @@
+<script setup lang="ts">
+defineProps<{ name: string }>()
+const paths: Record<string, string> = {
+  grid: 'M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z', inbox: 'M4 4h16v13h-5l-3 3-3-3H4zM4 13h4l2 3h4l2-3h4', layers: 'm12 3 9 5-9 5-9-5 9-5ZM3 12l9 5 9-5M3 16l9 5 9-5', check: 'M9 12l2 2 4-4M5 4h14v16H5z', file: 'M6 3h8l4 4v14H6zM14 3v5h5M9 13h6M9 17h6', chart: 'M4 19V5M4 19h16M8 15v-4M12 15V7M16 15v-6', users: 'M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2M10 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', team: 'M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75', building: 'M3 21h18M5 21V5l7-3 7 3v16M9 9h.01M15 9h.01M9 13h.01M15 13h.01M10 21v-4h4v4', shield: 'M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11ZM9 12l2 2 4-4', credit: 'M3 6h18v13H3zM3 10h18M7 15h3', settings: 'M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8ZM4 12l-2 1 2 3 2-1 2 1v2h4v-2l2-1 2 1 2-3-2-1v-2l2-1-2-3-2 1-2-1V4H8v2l-2 1-2-1-2 3 2 1z', help: 'M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0Z', chevron: 'm9 18 6-6-6-6', down: 'm7 10 5 5 5-5', panel: 'M4 4h16v16H4zM9 4v16', plus: 'M12 5v14M5 12h14', logout: 'M10 17l5-5-5-5M15 12H3M21 19V5', menu: 'M4 6h16M4 12h16M4 18h16', close: 'm6 6 12 12M18 6 6 18',
+}
+</script>
+<template><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path :d="paths[name] || paths.grid" /></svg></template>

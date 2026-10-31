@@ -24,6 +24,13 @@ interface Role {
 
 const route = useRoute()
 const orgId = route.params.id as string
+const sectionTitles: Record<string, string> = {
+  dashboard: 'Dashboard', activity: 'Activity', projects: 'Projects', tasks: 'Tasks', documents: 'Documents',
+  reports: 'Reports & Analytics', teams: 'Teams', organization: 'Organization settings', roles: 'Roles & Permissions',
+  billing: 'Billing & Subscription', settings: 'Account settings'
+}
+const section = computed(() => String(route.query.section || 'members'))
+const sectionTitle = computed(() => sectionTitles[section.value])
 
 const { apiFetch } = useApi()
 
@@ -121,6 +128,14 @@ onMounted(async () => {
     <NuxtLink to="/orgs" class="text-blue-600 text-sm mb-4 inline-block">&larr; Back to organizations</NuxtLink>
 
     <div v-if="loading" class="text-gray-500">Loading...</div>
+
+    <template v-else-if="section !== 'members' && sectionTitle">
+      <div class="max-w-4xl mx-auto p-8">
+        <p class="text-sm text-gray-400 mb-2">{{ org?.name }}</p>
+        <h1 class="text-2xl font-semibold mb-2">{{ sectionTitle }}</h1>
+        <p class="text-gray-500">This workspace area is ready to be connected to its module.</p>
+      </div>
+    </template>
 
     <template v-else>
       <h1 class="text-2xl font-semibold mb-1">{{ org?.name }}</h1>
