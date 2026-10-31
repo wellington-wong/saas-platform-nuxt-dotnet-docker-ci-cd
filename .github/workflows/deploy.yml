@@ -6,6 +6,9 @@ on:
     branches:
       - master
 
+    paths:
+      - "backend/**"
+
 permissions:
   contents: read
   packages: write
