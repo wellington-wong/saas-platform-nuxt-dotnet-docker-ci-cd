@@ -18,15 +18,11 @@ function toggleSidebar() {
 <template>
   <div class="app-frame" :class="{ 'with-sidebar': showAppShell, 'sidebar-collapsed': collapsed }">
     <template v-if="showAppShell">
-      <AppSidebar :collapsed="collapsed" @toggle="toggleSidebar" />
+      <AppSidebar v-if="auth.isAuthenticated" :collapsed="collapsed" @toggle="toggleSidebar" />
       <div v-if="mobileOpen" class="mobile-scrim" @click="mobileOpen = false" />
       <div class="mobile-sidebar-host" :class="{ open: mobileOpen }"><AppSidebar mobile @close="mobileOpen = false" /></div>
       <main class="app-main">
-        <header class="desktop-topbar">
-          <NuxtLink to="/orgs" class="desktop-brand">Sazzle</NuxtLink>
-          <div class="desktop-account"><span>{{ auth.user?.email || '' }}</span><button v-if="auth.isAuthenticated" type="button" @click="auth.logout(); navigateTo('/login')">Log out</button></div>
-        </header>
-        <header class="mobile-topbar"><button class="mobile-menu-button" aria-label="Open navigation" @click="mobileOpen = true"><SidebarIcon name="menu" /></button><NuxtLink to="/orgs" class="mobile-brand">sazzle</NuxtLink><span class="mobile-spacer" /></header>
+        <header class="mobile-topbar"><button class="mobile-menu-button" aria-label="Open navigation" @click="mobileOpen = true"><SidebarIcon name="menu" /></button><NuxtLink to="/orgs" class="mobile-brand">Sazzle</NuxtLink><span class="mobile-spacer" /></header>
         <slot />
       </main>
     </template>
