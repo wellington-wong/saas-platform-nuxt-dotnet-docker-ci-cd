@@ -17,6 +17,11 @@ interface Org {
   slug: string
 }
 
+interface Role {
+  id: string
+  name: string
+}
+
 const route = useRoute()
 const orgId = route.params.id as string
 
@@ -35,8 +40,10 @@ const inviting = ref(false)
 const inviteResult = ref('')
 const canInvite = ref(true) // becomes false if a 403 is hit
 
-const roles = ref<{ id: string; name: string }[]>([])
+const roles = ref<Role[]>([])
 
+
+const selectedRole = ref<Role['id'] | null>(null)
 const fetchMembers = async () => {
   try {
     members.value = await apiFetch<Member[]>(`/api/orgs/${orgId}/members`)
@@ -53,6 +60,11 @@ const fetchOrgs = async () => {
   org.value = orgs.find(o => o.id === orgId) || null }
 
 
+const fetchRoles = async () => {
+
+  roles.value = await apiFetch<Role[]>('/api/roles')}
+
+
 const sendInvite = async () => {
   inviting.value = true
   inviteResult.value = ''
@@ -62,7 +74,7 @@ const sendInvite = async () => {
     const result = await apiFetch<{ token: string; email: string }>(`/api/orgs/${orgId}/invitations`, {
       method: 'POST',
 
-      body: {email: inviteEmail.value, roleId: inviteRoleId.value}
+      body: {email: inviteEmail.value, roleId: selectedRole.value}
     })
     inviteResult.value = `Invitation sent. Share this link: ${window.location.origin}/invitations/${result.token}`
     inviteEmail.value = ''
@@ -95,7 +107,7 @@ const removeMember = async (userId: string) => {
 onMounted(async () => {
   loading.value = true
 
-  await Promise.all([fetchOrgs(), fetchMembers()])
+  await Promise.all([fetchOrgs(), fetchMembers(), fetchRoles()])
   loading.value = false
 })
 </script>
@@ -140,8 +152,11 @@ onMounted(async () => {
         <form @submit.prevent="sendInvite" class="space-y-3">
           <input v-model="inviteEmail" type="email" placeholder="Email address" required
                  class="w-full border rounded px-3 py-2" />
-          <input v-model="inviteRoleId" placeholder="Role ID (temporary - see note below)" required
-                 class="w-full border rounded px-3 py-2" />
+          <select v-model="selectedRole" class="w-full border rounded px-3 py-2 bg-gray-50" required>
+
+            <option disabled :value="null">Select role</option>
+            <option v-for="o in roles" :key="o.id" :value="o.id">{{ o.name }}</option>
+          </select>
           <button type="submit" :disabled="inviting"
                   class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50">
 
