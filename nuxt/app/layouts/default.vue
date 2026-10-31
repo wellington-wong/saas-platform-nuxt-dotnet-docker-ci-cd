@@ -74,6 +74,7 @@ body { margin: 0; }
 .org-menu { top: calc(100% + 6px); }
 .popover-label { margin: 5px 8px 7px; color: #979aa3; font-size: 10px; font-weight: 650; text-transform: uppercase; letter-spacing: .07em; }
 .org-option { display: flex; align-items: center; gap: 9px; min-height: 34px; padding: 5px 7px; color: #44474f; border-radius: 6px; font-size: 12px; text-decoration: none; }
+.org-option[type="button"] { width: 100%; border: 0; background: transparent; text-align: left; cursor: pointer; }
 .org-option:hover, .user-menu a:hover { background: #f5f6f8; }
 .selected-check { margin-left: auto; color: #5b55c8; }
 .create-org { border-top: 1px solid #eceef0; border-radius: 0; margin-top: 4px; padding-top: 9px; color: #696d76; }

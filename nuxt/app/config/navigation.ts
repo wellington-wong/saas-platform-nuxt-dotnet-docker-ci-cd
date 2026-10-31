@@ -1,6 +1,16 @@
 export type WorkspaceRole = 'Super Admin' | 'Organization Owner' | 'Organization Admin' | 'Team Admin' | 'Team Member' | 'Viewer'
 export type NavigationItem = { label: string; to: string; icon: string; permission?: keyof typeof roleAccess; roles?: WorkspaceRole[] }
 
+export function normalizeWorkspaceRole(name?: string): WorkspaceRole {
+  const normalized = name?.trim().toLowerCase()
+  if (normalized === 'owner' || normalized === 'organization owner') return 'Organization Owner'
+  if (normalized === 'admin' || normalized === 'organization admin') return 'Organization Admin'
+  if (normalized === 'team admin') return 'Team Admin'
+  if (normalized === 'super admin' || normalized === 'superadmin') return 'Super Admin'
+  if (normalized === 'viewer') return 'Viewer'
+  return 'Team Member'
+}
+
 const admins: WorkspaceRole[] = ['Super Admin', 'Organization Owner', 'Organization Admin']
 const roleAccess = {
   manageOrganization: admins,
